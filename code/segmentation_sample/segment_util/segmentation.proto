@@ -1,0 +1,60 @@
+package Segment;
+
+// Each spatio-temporal region is represented as a set of 2D frame-slices,
+// associated by a unique id that is given to each region. Therefore, there 
+// exists one SegmentationDesc for each frame in the original video.
+// 2D Regions are saved similar to polygon rasterization or RLE, as set of 
+// scanlines and the corresponding scanline intervals.
+// As the hierarchy of regions (super-regions, i.e. regions composed of regions)
+// is computed for the whole video volume, it would be redundant to store it at 
+// every frame, it is therefore only saved for the very first frame, for all
+// subsequent SegmentationDesc::hierarchy is empty.
+
+message SegmentationDesc {
+  message Region {
+    message Scanline {
+      message Interval {
+        required fixed32 left_x = 1;
+        required fixed32 right_x = 2;
+      }
+      
+      // In case of holes, this can be empty!
+      repeated Interval interval = 1;  
+    }
+    
+    required fixed32 id = 1;
+    required fixed32 size = 2;
+    repeated fixed32 neighbor_id = 3;
+    
+    required fixed32 top_y = 4;
+    optional fixed32 parent_id = 5;
+    
+    repeated Scanline scanline = 6;
+  }
+  
+  message CompoundRegion {
+    required fixed32 id = 1;
+    required fixed32 size = 2;
+    repeated fixed32 neighbor_id = 3;
+    
+    optional fixed32 parent_id = 4;
+    // List of child ids - references to previous level
+    repeated fixed32 child_id = 5; 
+  }
+  
+  message Hierarchy {
+    required fixed32 level = 1;
+    required fixed32 max_id = 2;
+    repeated CompoundRegion region = 3;
+  }
+  
+  required fixed32 max_id = 1;
+  repeated Region region = 2;
+  
+  // Hierarchy does not need to be present in case of flat segmentation.
+  repeated Hierarchy hierarchy = 3;
+
+  // General video information.
+  optional int32 frame_width = 4 [default = 0];
+  optional int32 frame_height = 5 [default = 0];
+}

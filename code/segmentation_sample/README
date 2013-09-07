@@ -1,0 +1,83 @@
+This is sample program to read and visualize the .pb files, obtained
+from our Video-Segmentation server. The contents of this package
+are open-source, feel free to adapt for our own research and other use.
+
+If you use, the segmentation and/or sample, please reference:
+
+@article{GrundmannKwatra2010,
+  author = {Matthias Grundmann and Vivek Kwatra and Mei Han and Irfan Essa},
+  title = {Efficient Hierarchical Graph-Based Video Segmentation},
+  journal = {IEEE CVPR},
+  year = {2010},
+}
+
+
+Version: 0.11 - 9/20/2010: Small adaptions in build process for windows and linux.
+Version: 0.1 - 7/1/2010: Initial release.
+
+
+
+Instructions:
+You will need cmake (>= 2.6), OpenCV (>= 1.0) and the protocol buffer library
+from Google (http://code.google.com/p/protobuf/) to build this example.
+
+To build the example:
+- Create a new binary directory that will contain the project files (PROJECT_DIR)
+- Use cmake GUI to configure the project in any project format you want, 
+or from command prompt to configure makefiles, use:
+> cd PROJECT_DIR
+> cmake SRC_DIR/segmentation_example
+> make
+
+- Run with: segmentation_example YOUR_SEGMENTATION_FILE.pb
+
+
+Regarding protobuffers on windows:
+
+Setting up protobuffers on windows is a bit of pain, but you are probably used to it :).
+
+I recommend downloading the source, unpacking it and building it in visual studio.
+1. After unpacking, go to the vsprojects subfolder, open protobuf.sln and build
+the whole SOLUTION in RELEASE mode.
+2. Execute extract_includes.bat in the same directory.
+3. Make a folder that will hold the created libraries, e.g. c:\third_party\protobuf
+4. Setup a new environment variable PROTOBUF_DIR and let it to the directory you chose in 3.
+5. Also add the directory you chose in 3 to your PATH variable.
+5. Copy the google folder from vsprojects\include\google to the PROTOBUF_DIR
+6. Copy libprotobuf.lib, libprotobuf-lite.lib, libprotoc.lib and protoc.exe from
+vsprojects\Release to PROTOBUF_DIR
+7. That's it. 
+
+For questions, email: grundmann.mattias@gmail.com
+
+
+
+
+Distributed under FreeBSD License: 
+
+Copyright 2010 Matthias Grundmann, Vivek Kwatra, Mei Han, Irfan Essa, Georgia Institute of Technology.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are
+permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of
+conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list
+of conditions and the following disclaimer in the documentation and/or other materials
+provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY GEORGIA INSTITUTE OF TECHNOLOGY ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The views and conclusions contained in the software and documentation are those of the
+authors and should not be interpreted as representing official policies, either expressed
+or implied, of Georgia Institute of Technology.
