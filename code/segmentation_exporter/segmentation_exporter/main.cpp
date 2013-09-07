@@ -28,7 +28,7 @@ int g_hierarchy_level;
 int g_frame_pos;
 
 // Frame width and height.
-int g_frame_num_;
+//int g_frame_num_;
 int g_frame_width;
 int g_frame_height;
 
@@ -40,7 +40,7 @@ SegmentationDesc* g_seg_hierarchy;
 IplImage* g_frame_buffer = 0;
 
 // Indicates if automatic playing is set.
-bool g_playing;
+//bool g_playing;
 
 // Returns number of hierarchy_levels.
 void RenderCurrentFrame(int frame_number) {
@@ -70,29 +70,33 @@ void RenderCurrentFrame(int frame_number) {
                            g_seg_hierarchy);
 }
 
-void FramePosChanged(int pos) {
-  g_frame_pos = pos;
-  RenderCurrentFrame(g_frame_pos);
-  cvShowImage("main_window", g_frame_buffer);
-}
+//void FramePosChanged(int pos) {
+//  g_frame_pos = pos;
+//  RenderCurrentFrame(g_frame_pos);
+//  cvShowImage("main_window", g_frame_buffer);
+//}
 
-void HierarchyLevelChanged(int level) {
-  g_hierarchy_level = level;
-  RenderCurrentFrame(g_frame_pos);
-  cvShowImage("main_window", g_frame_buffer);
-}
+//void HierarchyLevelChanged(int level) {
+//  g_hierarchy_level = level;
+//  RenderCurrentFrame(g_frame_pos);
+//  cvShowImage("main_window", g_frame_buffer);
+//}
 
 int main(int argc, char** argv) {
   // Get filename from command prompt.
   if (argc != 3) {
-    std::cout << "Usage: segmentation_sample INPUT_FILE_NAME OUTPUT_DIRECTORY_ROOT\n";
+    std::cout << "Usage: segmentation_exporter INPUT_FILE_NAME OUTPUT_DIRECTORY_ROOT\n";
     return 1;
   }
   
   std::string input_filename( argv[ 1 ] );
   std::string output_directory_root( argv[ 2 ] );
 
-  g_playing = false;
+    std::string mkdir_command = "mkdir " + output_directory_root;
+    std::cout << mkdir_command << std::endl;
+    system( mkdir_command.c_str() );
+
+  //g_playing = false;
   
   // Read segmentation file.
   g_segment_reader = new SegmentationReader( input_filename );
@@ -110,7 +114,7 @@ int main(int argc, char** argv) {
   g_seg_hierarchy = new SegmentationDesc;
   g_seg_hierarchy->ParseFromArray(&data_buffer[0], data_buffer.size());
 
-  g_frame_num_ = g_segment_reader->FrameNumber();
+  //g_frame_num_ = g_segment_reader->FrameNumber();
   g_frame_width = g_seg_hierarchy->frame_width();
   g_frame_height = g_seg_hierarchy->frame_height();
   
@@ -124,7 +128,7 @@ int main(int argc, char** argv) {
 	for ( int j = 0; j < g_seg_hierarchy->hierarchy_size() + 2; j++ )
 	{
 		std::stringstream directory_name_stream;
-		directory_name_stream << output_directory_root << "\\" << "heirarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+		directory_name_stream << output_directory_root << "/" << "heirarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
 		std::string directory_name = directory_name_stream.str();
 
 		std::string mkdir_command = "mkdir " + directory_name;
@@ -138,7 +142,7 @@ int main(int argc, char** argv) {
 			RenderCurrentFrame(g_frame_pos);
 
 			std::stringstream file_name_stream;
-			file_name_stream << directory_name << "\\" << std::setfill( '0' ) << std::setw( 6 ) << i + 1 << ".png";
+			file_name_stream << directory_name << "/" << std::setfill( '0' ) << std::setw( 6 ) << i + 1 << ".png";
 			std::string file_name = file_name_stream.str();
 
 			std::cout << file_name << std::endl;
