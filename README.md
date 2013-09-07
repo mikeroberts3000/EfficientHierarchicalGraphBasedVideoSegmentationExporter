@@ -30,3 +30,5 @@ $ sudo port install protobuf-cpp
 ```
 $ ./segmentation_exporter input_segmentation.pb output_folder
 ```
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/21caf0bf34821053ed531568fb89fc0f "githalytics.com")](http://githalytics.com/mroberts3000/EfficientHierarchicalGraphBasedVideoSegmentationExporter)
