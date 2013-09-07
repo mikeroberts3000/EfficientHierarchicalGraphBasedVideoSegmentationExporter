@@ -1,4 +1,4 @@
-This repository contains a tool to export the video segmentations from the system described in the paper <a href='http://www.cc.gatech.edu/cpl/projects/videosegmentation/'>Efficient Hierarchical Graph-Based Video Segmentation</a>. The system described in this paper returns segmentations as Protocol Buffer files. The exporter contained in this repository converts these Protocol Buffer files into image sequences.
+This repository contains C++ code to export the video segmentations from the system described in the paper <a href='http://www.cc.gatech.edu/cpl/projects/videosegmentation/'>Efficient Hierarchical Graph-Based Video Segmentation</a>. The system described in this paper returns segmentations as Protocol Buffer files. The exporter contained in this repository converts these Protocol Buffer files into image sequences.
 
 ### Requirements
 
