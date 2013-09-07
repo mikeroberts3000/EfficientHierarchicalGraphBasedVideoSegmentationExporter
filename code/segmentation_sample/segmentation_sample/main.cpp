@@ -7,8 +7,13 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <iostream>
+#include <sstream>
 #include <string>
+
 #include <cv.h>
 #include <highgui.h>
 
@@ -79,20 +84,22 @@ void HierarchyLevelChanged(int level) {
 
 int main(int argc, char** argv) {
   // Get filename from command prompt.
-  if (argc != 2) {
-    std::cout << "Usage: segmentation_sample FILE_NAME\n";
+  if (argc != 3) {
+    std::cout << "Usage: segmentation_sample INPUT_FILE_NAME OUTPUT_DIRECTORY_ROOT\n";
     return 1;
   }
   
-  std::string filename(argv[1]);
+  std::string input_filename( argv[ 1 ] );
+  std::string output_directory_root( argv[ 2 ] );
+
   g_playing = false;
   
   // Read segmentation file.
-  g_segment_reader = new SegmentationReader(filename);
+  g_segment_reader = new SegmentationReader( input_filename );
   g_segment_reader->OpenFileAndReadHeader();
   g_frame_pos = 0;
   
-  std::cout << "Segmentation file " << filename << " contains " 
+  std::cout << "Segmentation file " << input_filename << " contains " 
             << g_segment_reader->FrameNumber() << " frames.\n";
   
   // Read first frame, it contains the hierarchy.
@@ -110,50 +117,76 @@ int main(int argc, char** argv) {
   std::cout << "Video resolution: " << g_frame_width << "x" << g_frame_height << "\n";
   
   // Create OpenCV window.
-  cvNamedWindow("main_window");
+  //cvNamedWindow("main_window");
   
   RenderCurrentFrame(0);
-  cvShowImage("main_window", g_frame_buffer);
-  
-  cvCreateTrackbar("frame_pos", 
-                   "main_window", 
-                   &g_frame_pos, 
-                   g_segment_reader->FrameNumber() - 1,
-                   &FramePosChanged);  
 
-  cvCreateTrackbar("hier_level", 
-                   "main_window", 
-                   &g_hierarchy_level, 
-                   g_seg_hierarchy->hierarchy_size(),
-                   &HierarchyLevelChanged);  
+	for ( int j = 0; j < g_seg_hierarchy->hierarchy_size() + 2; j++ )
+	{
+		std::stringstream directory_name_stream;
+		directory_name_stream << output_directory_root << "\\" << "heirarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+		std::string directory_name = directory_name_stream.str();
+
+		std::string mkdir_command = "mkdir " + directory_name;
+		std::cout << mkdir_command << std::endl;
+		system( mkdir_command.c_str() );
+
+		for ( int i = 0; i < g_segment_reader->FrameNumber(); i++ )
+		{
+			g_frame_pos       = i;
+			g_hierarchy_level = j;
+			RenderCurrentFrame(g_frame_pos);
+
+			std::stringstream file_name_stream;
+			file_name_stream << directory_name << "\\" << std::setfill( '0' ) << std::setw( 6 ) << i + 1 << ".png";
+			std::string file_name = file_name_stream.str();
+
+			std::cout << file_name << std::endl;
+			cvSaveImage( file_name.c_str(), g_frame_buffer );
+		}
+	}
+
+  //cvShowImage("main_window", g_frame_buffer);
+  
+  //cvCreateTrackbar("frame_pos", 
+  //                 "main_window", 
+  //                 &g_frame_pos, 
+  //                 g_segment_reader->FrameNumber() - 1,
+  //                 &FramePosChanged);  
+
+  //cvCreateTrackbar("hier_level", 
+  //                 "main_window", 
+  //                 &g_hierarchy_level, 
+  //                 g_seg_hierarchy->hierarchy_size(),
+  //                 &HierarchyLevelChanged);  
 
   
-  int key_value = 0;
+  //int key_value = 0;
   
-  // Yotam Doron recommended this kind of loop.
-  while (1) {
-    key_value = cvWaitKey(30) & 0xFF;
-    if (key_value == 27) {
-      break;
-    }
+  //// Yotam Doron recommended this kind of loop.
+  //while (1) {
+  //  key_value = cvWaitKey(30) & 0xFF;
+  //  if (key_value == 27) {
+  //    break;
+  //  }
 
-    if (g_playing) {
-      FramePosChanged((g_frame_pos + 1) % g_frame_num_);
-    }
-    
-    switch (key_value) {
-      case 110:
-        FramePosChanged((g_frame_pos + 1) % g_frame_num_);
-        break;
-      case 112:
-        FramePosChanged((g_frame_pos - 1 + g_frame_num_) % g_frame_num_);
-        break;
-      case 32:
-        g_playing = !g_playing;
-      default:
-        break;
-    }
-  }
+  //  if (g_playing) {
+  //    FramePosChanged((g_frame_pos + 1) % g_frame_num_);
+  //  }
+  //  
+  //  switch (key_value) {
+  //    case 110:
+  //      FramePosChanged((g_frame_pos + 1) % g_frame_num_);
+  //      break;
+  //    case 112:
+  //      FramePosChanged((g_frame_pos - 1 + g_frame_num_) % g_frame_num_);
+  //      break;
+  //    case 32:
+  //      g_playing = !g_playing;
+  //    default:
+  //      break;
+  //  }
+  //}
   
   g_segment_reader->CloseFile();
   delete g_segment_reader;
