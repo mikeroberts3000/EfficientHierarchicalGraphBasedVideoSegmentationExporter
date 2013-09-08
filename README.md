@@ -1,5 +1,7 @@
 This repository contains C++ code to export the video segmentations from the system described in the paper <a href='http://www.cc.gatech.edu/cpl/projects/videosegmentation/'>Efficient Hierarchical Graph-Based Video Segmentation</a>. The system described in this paper returns segmentations as Protocol Buffer files. The exporter contained in this repository converts these Protocol Buffer files into image sequences.
 
+Note that most of this code was written by <a href='http://www.mgrundmann.com/'>Matthias Grundmann</a> and distributed on his <a href='http://www.cc.gatech.edu/cpl/projects/videosegmentation/'>project page</a>. I just hacked his code to export the segmentations rather than visualize them in a GUI.
+
 ### Requirements
 
 * __OpenCV__. I used OpenCV 2.4.6.1, but any recent version of OpenCV should work.
