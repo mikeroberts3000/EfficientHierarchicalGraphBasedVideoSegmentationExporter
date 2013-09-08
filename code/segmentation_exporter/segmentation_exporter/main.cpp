@@ -128,7 +128,11 @@ int main(int argc, char** argv) {
 	for ( int j = 0; j < g_seg_hierarchy->hierarchy_size() + 2; j++ )
 	{
 		std::stringstream directory_name_stream;
-		directory_name_stream << output_directory_root << "/" << "heirarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+		#ifdef _WIN32 // works for both 32 and 64 bit
+            directory_name_stream << output_directory_root << "\\" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+        #else
+            directory_name_stream << output_directory_root << "/" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+        #endif
 		std::string directory_name = directory_name_stream.str();
 
 		std::string mkdir_command = "mkdir " + directory_name;
