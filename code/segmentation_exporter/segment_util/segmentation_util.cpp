@@ -391,7 +391,7 @@ namespace Segment {
       
       vector<std::pair<int, uchar> >::const_iterator pos =
           std::lower_bound(region_ids_sorted.begin(), region_ids_sorted.end(),
-                           std::make_pair<int, uchar>(region_id, 0), RegionColorComp());
+                           std::make_pair(region_id, 0), RegionColorComp());
       if (pos != region_ids_sorted.end() && pos->first == region_id) {
         uchar color = pos->second;
         const RepeatedPtrField<Scanline>& scanlines = r->scanline();
