@@ -92,9 +92,9 @@ int main(int argc, char** argv) {
   std::string input_filename( argv[ 1 ] );
   std::string output_directory_root( argv[ 2 ] );
 
-    std::string mkdir_command = "mkdir " + output_directory_root;
-    std::cout << mkdir_command << std::endl;
-    system( mkdir_command.c_str() );
+  std::string mkdir_command = "mkdir " + output_directory_root;
+  std::cout << mkdir_command << std::endl;
+  system( mkdir_command.c_str() );
 
   //g_playing = false;
   
@@ -125,34 +125,32 @@ int main(int argc, char** argv) {
   
   RenderCurrentFrame(0);
 
-	for ( int j = 0; j < g_seg_hierarchy->hierarchy_size() + 2; j++ )
-	{
-		std::stringstream directory_name_stream;
-		#ifdef _WIN32 // works for both 32 and 64 bit
-            directory_name_stream << output_directory_root << "\\" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
-        #else
-            directory_name_stream << output_directory_root << "/" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
-        #endif
-		std::string directory_name = directory_name_stream.str();
+  for ( int j = 0; j < g_seg_hierarchy->hierarchy_size() + 2; j++ ) {
+    std::stringstream directory_name_stream;
+    #ifdef _WIN32 // works for both 32 and 64 bit
+      directory_name_stream << output_directory_root << "\\" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+    #else
+      directory_name_stream << output_directory_root << "/" << "hierarchy_level_" << std::setfill( '0' ) << std::setw( 2 ) << j;
+    #endif
+    std::string directory_name = directory_name_stream.str();
 
-		std::string mkdir_command = "mkdir " + directory_name;
-		std::cout << mkdir_command << std::endl;
-		system( mkdir_command.c_str() );
+    std::string mkdir_command = "mkdir " + directory_name;
+    std::cout << mkdir_command << std::endl;
+    system( mkdir_command.c_str() );
 
-		for ( int i = 0; i < g_segment_reader->FrameNumber(); i++ )
-		{
-			g_frame_pos       = i;
-			g_hierarchy_level = j;
-			RenderCurrentFrame(g_frame_pos);
+    for ( int i = 0; i < g_segment_reader->FrameNumber(); i++ ) {
+      g_frame_pos       = i;
+      g_hierarchy_level = j;
+      RenderCurrentFrame(g_frame_pos);
 
-			std::stringstream file_name_stream;
-			file_name_stream << directory_name << "/" << std::setfill( '0' ) << std::setw( 6 ) << i + 1 << ".png";
-			std::string file_name = file_name_stream.str();
+      std::stringstream file_name_stream;
+      file_name_stream << directory_name << "/" << std::setfill( '0' ) << std::setw( 6 ) << i + 1 << ".png";
+      std::string file_name = file_name_stream.str();
 
-			std::cout << file_name << std::endl;
-			cvSaveImage( file_name.c_str(), g_frame_buffer );
-		}
-	}
+      std::cout << file_name << std::endl;
+      cvSaveImage( file_name.c_str(), g_frame_buffer );
+    }
+  }
 
   //cvShowImage("main_window", g_frame_buffer);
   
